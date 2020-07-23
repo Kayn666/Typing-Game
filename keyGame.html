@@ -4,74 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        @font-face { 
-        font-family: keygame; 
-        src: url("keygame.ttf"); 
-        }
-        @font-face { 
-        font-family: title; 
-        src: url("title.ttf"); 
-        }
-        body{
-            background-image: url(background.jpg);
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .headed{
-            width: 510px;
-            height: 300px;
-            margin: 200px auto auto;
-        }
-        .title{
-            width: 510px;
-            height: 120px;
-            font-size: 100px;
-            color: blue;
-            font-family: title;
-            opacity: .7;
-            cursor: default;
-        }
-        .start{
-            width: 100px;
-            height: 50px;
-            background: blue;
-            list-style: none;
-            border: none;
-            color: #fff;
-            font-size: 20px;
-            font-weight: bolder;
-            display: block;
-            margin: 50px auto auto;
-            cursor: pointer;
-            opacity: .7;
-        }
-        .start:hover{
-            opacity: .4;
-        }
-    </style>
+    <link rel="stylesheet" href="keyGame.css">
 </head>
 <body>
     <div class="headed">
         <span class="title">Typing Game</span>
         <button class="start">START</button>
     </div>
+    <div class="grade">
+        <div class="grade-title">分数</div>
+        <div class="grade-num"></div>
+    </div>
+    <div class="life">
+        <div class="life-title">生命</div>
+        <div class="life-num"></div>
+    </div>
+    <div class="line"></div>
     <script>
+        
     var title=document.querySelector(".title")
     var start=document.querySelector(".start")
+    var grade=document.querySelector(".grade")
+    var life=document.querySelector(".life")
+    var line=document.querySelector(".line")
+
     start.onclick=function(){
         game()
         title.style.display="none"
         start.style.display="none"
+        grade.style.display="block"
+        life.style.display="block"
+        line.style.display="block"
     }
+
+    var gradeNum=document.querySelector(".grade-num")
+    gradeNum.innerHTML=0
+
+    var lifeNum=document.querySelector(".life-num")
+    lifeNum.innerHTML=10
 
     function game(){
         var letters=["A","B","C","D","E","F","G","H","I",
         "J","K","L","M","N","O","P","Q","R","S","T","U",
         "V","W","X","Y","Z"]
 
-    var divs=[]
-    function create(num){
+        var divs=[]
+        function create(num){
         var current=[]
         for(var i=0;i<num;i++){
             current.push(letters[Math.floor
@@ -90,9 +68,9 @@
             document.body.appendChild(div)
             divs.push(div)
         }
-    }
+        }
 
-    create(3)
+        create(3)
 
         var speed=3
         setInterval(function(){
@@ -105,11 +83,12 @@
             var letter=String.fromCharCode(ev.keyCode)
             for(var i=0;i<divs.length;i++){
                 if(divs[i].innerHTML==letter){
+                    gradeNum.innerHTML++
                     document.body.removeChild(divs[i])
                     divs.splice(i,1)
                     create(1)
                     break;
-                }
+                }        
             }
         }
     }
