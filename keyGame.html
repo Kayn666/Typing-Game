@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>打字游戏</title>
     <link rel="stylesheet" href="keyGame.css">
 </head>
 <body>
@@ -11,6 +11,7 @@
         <span class="title">Typing Game</span>
         <button class="start">START</button>
     </div>
+    <div class="pass"></div>
     <div class="grade">
         <div class="grade-title">分数</div>
         <div class="grade-num"></div>
@@ -27,14 +28,17 @@
     var grade=document.querySelector(".grade")
     var life=document.querySelector(".life")
     var line=document.querySelector(".line")
+    var pass=document.querySelector(".pass")
 
     start.onclick=function(){
-        game()
+        var dif=2
+        game(dif)
         title.style.display="none"
         start.style.display="none"
         grade.style.display="block"
         life.style.display="block"
         line.style.display="block"
+        pass.style.display="block"
     }
 
     var gradeNum=document.querySelector(".grade-num")
@@ -43,7 +47,10 @@
     var lifeNum=document.querySelector(".life-num")
     lifeNum.innerHTML=10
 
-    function game(){
+    function game(dif){
+        var guan=1
+        pass.innerHTML="第"+guan+"关"
+
         var letters=["A","B","C","D","E","F","G","H","I",
         "J","K","L","M","N","O","P","Q","R","S","T","U",
         "V","W","X","Y","Z"]
@@ -61,7 +68,7 @@
             var div=document.createElement("div")
             div.innerHTML=current[i]
             div.style.cssText="position:absolute;left:"+
-            document.documentElement.clientWidth*Math.random()+
+            (document.documentElement.clientWidth-50)*Math.random()+
             "px;top:"+40*Math.random()+"px;font-size:"+
             10+10*Math.random()+"px;font-family:'keygame';"+
             "color:"+color[Math.floor(color.length*Math.random())]
@@ -70,9 +77,8 @@
         }
         }
 
-        create(3)
-
-        var speed=3
+        create(dif)
+        var speed=dif
         var t=setInterval(function(){
             for(var i=0;i<divs.length;i++){
                 divs[i].style.top=divs[i].offsetTop+speed+"px"
@@ -84,12 +90,20 @@
                     break;
                 }
             }
+            if(gradeNum.innerHTML==20){
+                alert("本关通过")
+                gradeNum.innerHTML=0
+                lifeNum.innerHTML=10
+                speed=speed+0.3
+                create(1)
+                guan++
+                pass.innerHTML="第"+guan+"关"
+            }
             if(lifeNum.innerHTML<=0){
-                alert("游戏结束")
-                clearInterval(t)
+                alert("游戏结束,得分为"+gradeNum.innerHTML)
+                window.location.reload()
             }
         },50)
-
         document.onkeydown=function(ev){
             var letter=String.fromCharCode(ev.keyCode)
             for(var i=0;i<divs.length;i++){
